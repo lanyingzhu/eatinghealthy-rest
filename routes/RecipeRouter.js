@@ -88,11 +88,17 @@ recipeRouter.route('/:recipeId/comments')
             console.log(req.params.recipeId);
             if (err) next(err);
             console.log(req.decoded);
-
-            req.body.postedBy = req.decoded._id;
-
+            if (req.decoded.firebase) {
+                req.body.author = req.decoded.email;
+            } else {
+                req.body.postedBy = req.decoded._id;
+                req.body.author = req.decoded.username;
+            }
             recipe.comments.push(req.body);
+            console.log(recipe);
             recipe.save(function (err, recipe) {
+                console.log(recipe);
+
                 if (err) next(err);
                 console.log('Updated Comments!');
                 res.json(recipe);

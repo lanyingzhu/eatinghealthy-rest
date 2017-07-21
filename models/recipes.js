@@ -9,11 +9,14 @@ var commentSchema = new Schema({
         type: Number,
         min: 1,
         max: 5,
-        required: true
+        required: false
     },
     comment:  {
         type: String,
         required: true
+    },
+    author:  {
+        type: String,
     },
     postedBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +30,11 @@ var commentSchema = new Schema({
 var recipeSchema = new Schema({
     name: {
         type: String,
+        required: true,
+        unique: true
+    },
+    likeNumber: {
+        type: Number,
         required: true,
         unique: true
     },

@@ -5,6 +5,7 @@ var cfenv = require('cfenv');
 
 var User = new Schema({
     username: String,
+    email: String,
     password: String,
     OauthId: String,
     OauthToken: String,

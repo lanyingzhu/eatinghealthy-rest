@@ -11,7 +11,17 @@ exports.getToken = function (user) {
 exports.verifyOrdinaryUser = function (req, res, next) {
     console.log('Verify ordinary User');
     // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    var token = req.body.token;
+    if (token) {
+	var secretKey = "h7UDSB7iLiEg9GE0mYAdMlGaVVVM2DG2vydeyzct";
+        decoded = jwt.decode(token);
+        console.log(decoded);
+	req.decoded = decoded;
+	next();
+        return 
+    }
+    token = null;
+    token = req.query.token || req.headers['x-access-token'];
 
     // decode token
     if (token) {
