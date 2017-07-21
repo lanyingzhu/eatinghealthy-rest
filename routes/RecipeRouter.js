@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 
 var Recipes = require('../models/recipes');
 var Verify = require('./verify');
+Recipes = Recipes.Recipes;
 
 var recipeRouter = express.Router();
 recipeRouter.use(bodyParser.json());

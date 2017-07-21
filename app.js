@@ -20,7 +20,13 @@ db.once('open', function () {
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var recipeRouter = require('./routes/recipeRouter');
+var recipeRouter = require('./routes/RecipeRouter');
+
+var useCloudDB = true;
+if (useCloudDB) {
+    users = require('./routes/users_cloudDB');
+    recipeRouter = require('./routes/RecipeRouter_cloudDB');
+}
 
 var app = express();
 
@@ -38,9 +44,9 @@ app.use(cookieParser());
 // passport config
 var User = require('./models/user');
 app.use(passport.initialize());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(new LocalStrategy(User.User.authenticate()));
+passport.serializeUser(User.User.serializeUser());
+passport.deserializeUser(User.User.deserializeUser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
