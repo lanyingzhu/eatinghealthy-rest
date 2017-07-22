@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 
 var User = require('../models/user');
 var Verify = require('./verify');
+var url = require('url');
 User = User.UsersDB;
 
 var router = express.Router();
@@ -38,11 +39,10 @@ router.post('/register', function (req, res) {
         user.email = req.body.email;
     }
     for (i=0; i<users.length; i++) {
-        console.log("req username: " + req.username);
         console.log("username: " + users[i].username);
         if (req.body.username === users[i].username) {
             return res.status(400).json({
-                err: "user " + req.body.username + " is existed"
+                err: {message: "user <b>" + req.body.username + "</b> is existed"}
             });
         }
     }
@@ -51,40 +51,28 @@ router.post('/register', function (req, res) {
             return res.status(500).json({err: err});
         }
         console.log("added user: " + user);
-        passport.authenticate('local')(req, res, function () {
-            console.log(req);
-            return res.status(200).json({status: 'Registration Successful!'});
-        });
+        users.push({'username': req.body.username, 'password': req.body.password});
+		return res.status(200).json({status: 'Registration Successful!'});
     });
 });
 
 router.post('/login', function (req, res, next) {
-  console.log(req.body);
-  passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).json({
-        err: info
-      });
-    }
-    console.log(req.body)
-    req.logIn(user, function(err) {
-      if (err) {
-        return res.status(500).json({
-          err: 'Could not log in user'
-        });
-      }
+  loginData = req.body;
+  console.log(loginData);
 
-      var token = Verify.getToken({"username":user.username, "_id":user._id, "admin":user.admin});
-          res.status(200).json({
-            status: 'Login successful!',
-            success: true,
-            token: token
-          });
-    });
-  })(req,res,next);
+  for (i=0; i<users.length; i++) {
+      console.log("username: " + users[i].username);
+      if (loginData.username === users[i].username) {
+        if (loginData.password === users[i].password) {
+            return res.status(200).json({
+				status: 'Login successful!',
+                success: true});
+        }
+      }
+  }
+  return res.status(401).json(
+	{err: {message: 'Unauthorized or Non-existed user!', name: loginData.username}});
+  
 });
 
 router.get('/logout', function(req, res) {
