@@ -40,9 +40,15 @@ exports.verifyOrdinaryUser = function (req, res, next) {
     } else {
         // if there is no token
         // return an error
-        var err = new Error('No token provided!');
-        err.status = 403;
-        return next(err);
+        console.log(req.body);
+        if (req.body.author) {
+            req.decoded = {"author": req.body.author};
+            next();
+        } else {
+            var err = new Error('No token provided!');
+            err.status = 403;
+            return next(err);
+        }
     }
 };
 

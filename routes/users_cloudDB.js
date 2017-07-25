@@ -39,11 +39,10 @@ router.post('/register', function (req, res) {
         user.email = req.body.email;
     }
     for (i=0; i<users.length; i++) {
-        console.log("req username: " + req.username);
         console.log("username: " + users[i].username);
         if (req.body.username === users[i].username) {
             return res.status(400).json({
-                err: "user " + req.body.username + " is existed"
+                err: {message: "user <b>" + req.body.username + "</b> is existed"}
             });
         }
     }
@@ -52,18 +51,15 @@ router.post('/register', function (req, res) {
             return res.status(500).json({err: err});
         }
         console.log("added user: " + user);
-        passport.authenticate('local')(req, res, function () {
-            console.log(req);
-            return res.status(200).json({status: 'Registration Successful!'});
-        });
+        users.push({'username': req.body.username, 'password': req.body.password});
+		return res.status(200).json({status: 'Registration Successful!'});
     });
 });
 
 router.post('/login', function (req, res, next) {
-  var loginData = url.parse(req.url, true).query;
+  loginData = req.body;
   console.log(loginData);
 
-  console.log("username: " + loginData.username);
   for (i=0; i<users.length; i++) {
       console.log("username: " + users[i].username);
       if (loginData.username === users[i].username) {
@@ -73,6 +69,14 @@ router.post('/login', function (req, res, next) {
       }
   }
   return res.status(401).json({status: 'Login Failed!'});
+            return res.status(200).json({
+				status: 'Login successful!',
+                success: true});
+        }
+      }
+  }
+  return res.status(401).json(
+	{err: {message: 'Unauthorized or Non-existed user!', name: loginData.username}});
 });
 
 router.get('/logout', function(req, res) {
