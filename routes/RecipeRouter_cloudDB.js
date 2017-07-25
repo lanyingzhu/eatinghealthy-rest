@@ -49,11 +49,22 @@ recipeRouter.route('/:recipeId')
         });
     })
 
-    .put( function(req, res, next){
+    .put(function(req, res, next){
         console.log(req.body);
-        Recipes.update(req.body, function (err, recipe) {
+        console.log(req.params.recipeId);
+        Recipes.get(req.params.recipeId, function (err, recipe) {
             if (err) next(err);
-            res.json(recipe);
+            console.log(recipe);
+            recipe.likeNumber = parseInt(req.body.likeNumber);
+
+            Recipes.insert(recipe, function (err, recipe) {
+                if (err) next(err);
+                Recipes.get(req.params.recipeId, function (err, recipe) {
+                    if (err) next(err);
+                    console.log(recipe);
+                    res.json(recipe);
+                });
+            });
         });
     })
 

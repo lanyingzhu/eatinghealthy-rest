@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 
 var User = require('../models/user');
 var Verify = require('./verify');
+var url = require('url');
 User = User.UsersDB;
 
 var router = express.Router();
@@ -59,32 +60,19 @@ router.post('/register', function (req, res) {
 });
 
 router.post('/login', function (req, res, next) {
-  console.log(req.body);
-  passport.authenticate('local', function (err, user, info) {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.status(401).json({
-        err: info
-      });
-    }
-    console.log(req.body)
-    req.logIn(user, function(err) {
-      if (err) {
-        return res.status(500).json({
-          err: 'Could not log in user'
-        });
-      }
+  var loginData = url.parse(req.url, true).query;
+  console.log(loginData);
 
-      var token = Verify.getToken({"username":user.username, "_id":user._id, "admin":user.admin});
-          res.status(200).json({
-            status: 'Login successful!',
-            success: true,
-            token: token
-          });
-    });
-  })(req,res,next);
+  console.log("username: " + loginData.username);
+  for (i=0; i<users.length; i++) {
+      console.log("username: " + users[i].username);
+      if (loginData.username === users[i].username) {
+        if (loginData.password === users[i].password) {
+            return res.status(200).json({status: 'Login Successful!'});
+        }
+      }
+  }
+  return res.status(401).json({status: 'Login Failed!'});
 });
 
 router.get('/logout', function(req, res) {
