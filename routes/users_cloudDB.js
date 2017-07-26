@@ -64,19 +64,15 @@ router.post('/login', function (req, res, next) {
       console.log("username: " + users[i].username);
       if (loginData.username === users[i].username) {
         if (loginData.password === users[i].password) {
-            return res.status(200).json({status: 'Login Successful!'});
-        }
-      }
-  }
-  return res.status(401).json({status: 'Login Failed!'});
             return res.status(200).json({
 				status: 'Login successful!',
                 success: true});
         }
       }
   }
+
   return res.status(401).json(
-	{err: {message: 'Unauthorized or Non-existed user!', name: loginData.username}});
+    {err: {message: 'Unauthorized or Non-existed user!', name: loginData.username}});
 });
 
 router.get('/logout', function(req, res) {
