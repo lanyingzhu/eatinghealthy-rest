@@ -13,6 +13,7 @@ recipeRouter.route('/')
     .get(function (req,res,next){
         Recipes.list({include_docs: true}, function (err, recipe) {
             if (err) next(err);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(recipe);
         });
     })
@@ -35,6 +36,7 @@ recipeRouter.route('/')
         Recipes.destroy({}, function (err, resp) {
             if (err) next(err);
             console.log("hello")
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(resp);
         });
     });
@@ -45,6 +47,7 @@ recipeRouter.route('/:recipeId')
         console.log(req.params.recipeId);
         Recipes.get(req.params.recipeId, function (err, recipe) {
             if (err) next(err);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(recipe);
         });
     })
@@ -62,6 +65,7 @@ recipeRouter.route('/:recipeId')
                 Recipes.get(req.params.recipeId, function (err, recipe) {
                     if (err) next(err);
                     console.log(recipe);
+                    res.setHeader('Access-Control-Allow-Origin', '*');
                     res.json(recipe);
                 });
             });
@@ -76,6 +80,7 @@ recipeRouter.route('/:recipeId')
             }
             Recipes.destroy(data._id, data._rev, function (err, resp) {
                 if (err) next(err);
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.json(resp);
             });
         });
@@ -86,6 +91,7 @@ recipeRouter.route('/:recipeId/comments')
     .get(function (req, res, next) {
         Recipes.get(req.params.recipeId, function (err, recipe) {
             if (err) next(err);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(recipe.comments);
         });
     })
@@ -102,6 +108,7 @@ recipeRouter.route('/:recipeId/comments')
             Recipes.insert(recipe, function (err, data) {
                 if (err) next(err);
                 console.log('Updated Comments!');
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.json(data);
             });
         });
@@ -128,6 +135,7 @@ recipeRouter.route('/:recipeId/comments/:commentId')
     .get(function (req, res, next) {
         Recipes.get(req.params.recipeId, function (err, recipe) {
             if (err) next(err);
+            res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(recipe.comments.id(req.params.commentId));
         });
     })
@@ -148,6 +156,7 @@ recipeRouter.route('/:recipeId/comments/:commentId')
             Recipes.insert(recipe, function (err, data) {
                 if (err) next(err);
                 console.log('Updated Comments!');
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.json(data);
             });
         });
@@ -165,6 +174,7 @@ recipeRouter.route('/:recipeId/comments/:commentId')
             recipe.comments.id(req.params.commentId).remove();
             Recipes.insert(recipe, function (err, resp) {
                 if (err) next(err);
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.json(resp);
             });
         });
