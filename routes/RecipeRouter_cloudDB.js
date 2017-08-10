@@ -39,6 +39,13 @@ recipeRouter.route('/')
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.json(resp);
         });
+    })
+
+    .options(function (req,res) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        res.json();
     });
 
 recipeRouter.route('/:recipeId')
@@ -84,7 +91,15 @@ recipeRouter.route('/:recipeId')
                 res.json(resp);
             });
         });
+    })
+
+    .options(function (req,res) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        res.json();
     });
+
 
 recipeRouter.route('/:recipeId/comments')
 
@@ -128,6 +143,13 @@ recipeRouter.route('/:recipeId/comments')
                 res.end('Deleted all comments!');
             });
         });
+    })
+
+    .options(function (req,res) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        res.json();
     });
 
 recipeRouter.route('/:recipeId/comments/:commentId')
@@ -157,6 +179,7 @@ recipeRouter.route('/:recipeId/comments/:commentId')
                 if (err) next(err);
                 console.log('Updated Comments!');
                 res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
                 res.json(data);
             });
         });
@@ -178,6 +201,13 @@ recipeRouter.route('/:recipeId/comments/:commentId')
                 res.json(resp);
             });
         });
+    })
+
+    .options(function (req,res) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+        res.json();
     });
 
 module.exports = recipeRouter;
